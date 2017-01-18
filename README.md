@@ -7,7 +7,7 @@
 ### Background
 
 
-While implementing a Tumblebit server in “classic tumbler” mode and after carefully reviewing **Fig 3 of the original white paper describing interactions between Tumbler and Bob**, I came to the conclusion that steps 2,3,4 and steps 6,7 could be simplified (step 5 and 9-12 are unchanged).
+While implementing a demo Tumblebit server in “classic tumbler” mode and after carefully reviewing **Fig 3 of the original white paper describing interactions between Tumbler and Bob**, I came to the conclusion that steps 2,3,4 and steps 6,7 could be simplified (step 5 and 9-12 are unchanged).
 
 The objectives are 
 1. to stick to the most common cryptographic primitives (avoid Tumblebit-specific data formats) 
@@ -29,12 +29,13 @@ In Fig. 3 **step 2**, Bob generates 15 “real” payout addresses (keeps them s
 
 In **step 3**, Bob prepares 285  “fake” transactions like so:
 
-Fake transaction i pays Tumbler  compressed Bitcoin address (corresponding to PKT) 1 BTC (no network fee bearing in mind the transaction will never hit the blockchain ) with an OP_RETURN output containing the hex string “H || i” where H is the hash160 corresponding to the public key PKB.
+Fake transaction i pays Tumbler  compressed Bitcoin address (corresponding to PKT) 1 BTC (no network fee bearing in mind the transaction will never hit the blockchain ) with an OP_RETURN output containing the hex string `H || i `where H is the hash160 corresponding to the public key PKB.
 
 Such fake transaction only sends a full refund to Tumbler and is unlikely to confirm without network fees.
 _No need for Bob to generate (and later transmit to Tumbler) a set of 300 random pad values. Bob needs only to generate 2 regular, Bitcoin key pairs._
 
 Bob hides the transactions in 300 sighash values (regular Bitcoin sighash computations here) , permutes them (**Step 4**), and finally sends them to Tumbler as beta1, ..., beta300.
+
 _Minimized data flow: no need for Bob to send to Tumbler any hR, hF_ 
 
 In Step 5, Tumbler signs each betai with SKT to create an ECDSA-Secp256k1 signature sigmai. 
