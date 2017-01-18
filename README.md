@@ -11,7 +11,7 @@ While implementing a demo Tumblebit server in “classic tumbler” mode and aft
 
 The objectives are 
 
-1. to stick to the most common cryptographic primitives (avoid Tumblebit-specific data formats) 
+1. stick to the most common cryptographic primitives (avoid Tumblebit-specific data formats) 
 2. reduce the amount of data flowing back and forth between Tumbler and Bob.
 3. preserve the security and privay-protection proprerties of the original Tumblebit protocol
 
