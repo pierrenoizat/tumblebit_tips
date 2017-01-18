@@ -30,7 +30,7 @@ In Fig. 3 **step 2**, Bob generates 15 “real” payout addresses (keeps them s
 
 In **step 3**, Bob prepares 285  “fake” transactions like so:
 
-Fake transaction i pays Tumbler  compressed Bitcoin address (corresponding to PKT) 1 BTC (no network fee bearing in mind the transaction will never hit the blockchain ) with an OP_RETURN output containing the hex string `H || i `where H is the hash160 corresponding to the public key PKB.
+Fake transaction i pays Tumbler  compressed Bitcoin address (corresponding to PKT) 1 BTC (no network fee bearing in mind the transaction will never hit the blockchain ) with an OP_RETURN output containing the hex string `H || i `where H is the hash160 corresponding to the public key PKF.
 
 Such fake transaction only sends a full refund to Tumbler and is unlikely to confirm without network fees.
 _No need for Bob to generate (and later transmit to Tumbler) a set of 300 random pad values. Bob needs only to generate 2 regular, Bitcoin key pairs._
