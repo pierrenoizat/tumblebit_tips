@@ -36,9 +36,14 @@ In Step 5, Tumbler signs each betai with SKT to create an ECDSA-Secp256k1 signat
 _No change from original white paper._
 
 **Step 6**: Bob sends to Tumbler the 15 “real” indices along with PKF
-Minimized data flow: Bob sends  a single public key PKF in lieu of salt value and 300 pad values.
+
+_Minimized data flow: Bob sends  a single public key PKF in lieu of salt value and 300 pad values._
 
 **Step 7**: Tumbler can now compute the “fake” sighash values and verify that they match the “fake” betai values:
-betai = sighash value of tx paying Tumbler 1 BTC with an OP_RETURN output bearing the hash160 digest corresponding to PKF. The hash160 is appended with i so that each i is a preimage of betai.
+
+betai = sighash value of tx paying Tumbler 1 BTC with an OP_RETURN output bearing the hash160 digest corresponding to PKF. 
+
+The hash160 is appended with i so that each i is a preimage of betai.
+
 _No need for the CashOutTFormat nor the FakeFormat specified in the original white paper_
 
