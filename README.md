@@ -16,7 +16,7 @@ The objectives are
 3. preserve the security and privay-protection proprerties of the original Tumblebit protocol
 
 Objective 1 is meant to facilitate integration of Tumblebit features into multiple wallet implementations: 
-wallet developpers should be able to use their favorite Bitcoin library with minimal addtional code.
+wallet developpers should be able to use their favorite Bitcoin library with minimal additional code.
 
 
 ### Proposal
