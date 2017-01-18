@@ -1,37 +1,41 @@
-## Welcome to GitHub Pages
+## TIP 1
 
-You can use the [editor on GitHub](https://github.com/pierrenoizat/tumblebit_tips/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### Background
 
-### Markdown
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+While implementing a Tumblebit server in “classic tumbler” mode and after carefully reviewing **Fig 3 of the original white paper describing interactions between Tumbler and Bob**, I came to the conclusion that steps 2,3,4 and steps 6,7 could be simplified (step 5 and 9-12 are unchanged).
 
-```markdown
-Syntax highlighted code block
+The objectives are 
+1. to stick to the most common cryptographic primitives (avoid Tumblebit-specific data formats) 
+2. reduce the amount of data flowing back and forth between Tumbler and Bob.
+3. preserve the security and privay-protection proprerties of the original Tumblebit protocol
 
-# Header 1
-## Header 2
-### Header 3
+Objective 1 is meant to facilitate integration of Tumblebit features into multiple wallet implementations: wallet developpers should be able to use their favorite Bitcoin library with minimal addtional code.
 
-- Bulleted
-- List
+### Proposal
 
-1. Numbered
-2. List
 
-**Bold** and _Italic_ and `Code` text
+Initially, before each payment phase, Tumbler generates a fresh ECDSA key pair (PKT, SKT).
+Bob generates 2 key pairs, “real” (PKB, SKB) and “fake” (PKF, SKF). Bob keeps PKF secret for now and publishes PKB.
 
-[Link](url) and ![Image](src)
-```
+In Fig. 3 **step 2**, Bob generates 15 “real” payout addresses (keeps them secret for now) and prepares 15 distinct “real” transactions.
+In **step 3**, Bob prepares 285  “fake” transactions like so:
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+Fake transaction i pays Tumbler  compressed Bitcoin address (corresponding to PKT) 1 BTC (no network fee bearing in mind the transaction will never hit the blockchain ) with an OP_RETURN output containing the hex string “H || i” where H is the hash160 corresponding to the public key PKB.
+Such fake transaction only sends a full refund to Tumbler and is unlikely to confirm without network fees.
+_No need for Bob to generate (and later transmit to Tumbler) a set of 300 random pad values. Bob needs only to generate 2 regular, Bitcoin key pairs._
 
-### Jekyll Themes
+Bob hides the transactions in 300 sighash values (regular Bitcoin sighash computations here) , permutes them (**Step 4**), and finally sends them to Tumbler as beta1, ..., beta300.
+_Minimized data flow: no need for Bob to send to Tumbler any hR, hF_ 
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/pierrenoizat/tumblebit_tips/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+In Step 5, Tumbler signs each betai with SKT to create an ECDSA-Secp256k1 signature sigmai. 
+_No change from original white paper._
 
-### Support or Contact
+**Step 6**: Bob sends to Tumbler the 15 “real” indices along with PKF
+Minimized data flow: Bob sends  a single public key PKF in lieu of salt value and 300 pad values.
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+**Step 7**: Tumbler can now compute the “fake” sighash values and verify that they match the “fake” betai values:
+betai = sighash value of tx paying Tumbler 1 BTC with an OP_RETURN output bearing the hash160 digest corresponding to PKF. The hash160 is appended with i so that each i is a preimage of betai.
+_No need for the CashOutTFormat nor the FakeFormat specified in the original white paper_
+
