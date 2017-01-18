@@ -10,6 +10,7 @@
 While implementing a demo Tumblebit server in “classic tumbler” mode and after carefully reviewing **Fig 3 of the original white paper describing interactions between Tumbler and Bob**, I came to the conclusion that steps 2,3,4 and steps 6,7 could be simplified (step 5 and 9-12 are unchanged).
 
 The objectives are 
+
 1. to stick to the most common cryptographic primitives (avoid Tumblebit-specific data formats) 
 2. reduce the amount of data flowing back and forth between Tumbler and Bob.
 3. preserve the security and privay-protection proprerties of the original Tumblebit protocol
