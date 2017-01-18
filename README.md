@@ -14,12 +14,14 @@ The objectives are
 2. reduce the amount of data flowing back and forth between Tumbler and Bob.
 3. preserve the security and privay-protection proprerties of the original Tumblebit protocol
 
-Objective 1 is meant to facilitate integration of Tumblebit features into multiple wallet implementations: wallet developpers should be able to use their favorite Bitcoin library with minimal addtional code.
+Objective 1 is meant to facilitate integration of Tumblebit features into multiple wallet implementations: 
+wallet developpers should be able to use their favorite Bitcoin library with minimal addtional code.
 
 ### Proposal
 
 
 Initially, before each payment phase, Tumbler generates a fresh ECDSA key pair (PKT, SKT).
+
 Bob generates 2 key pairs, “real” (PKB, SKB) and “fake” (PKF, SKF). Bob keeps PKF secret for now and publishes PKB.
 
 In Fig. 3 **step 2**, Bob generates 15 “real” payout addresses (keeps them secret for now) and prepares 15 distinct “real” transactions.
@@ -36,14 +38,11 @@ In Step 5, Tumbler signs each betai with SKT to create an ECDSA-Secp256k1 signat
 _No change from original white paper._
 
 **Step 6**: Bob sends to Tumbler the 15 “real” indices along with PKF
-
 _Minimized data flow: Bob sends  a single public key PKF in lieu of salt value and 300 pad values._
 
 **Step 7**: Tumbler can now compute the “fake” sighash values and verify that they match the “fake” betai values:
-
 betai = sighash value of tx paying Tumbler 1 BTC with an OP_RETURN output bearing the hash160 digest corresponding to PKF. 
 
 The hash160 is appended with i so that each i is a preimage of betai.
-
 _No need for the CashOutTFormat nor the FakeFormat specified in the original white paper_
 
