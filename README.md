@@ -7,7 +7,7 @@
 ### Background
 
 
-While implementing a demo Tumblebit server in “classic tumbler” mode and after carefully reviewing **Fig 3 of the original white paper describing interactions between Tumbler and Bob**, I came to the conclusion that steps 2,3,4 and steps 6,7 could be simplified (step 5 and 9-12 are unchanged).
+While implementing a demo Tumblebit server in “classic tumbler” mode and after carefully reviewing **Fig 4 of the [white paper](https://eprint.iacr.org/2016/575.pdf) describing interactions between Tumbler and Bob**, I came to the conclusion that steps 2,3,4 and steps 6,7 could be simplified (step 5 and 9-12 are unchanged).
 
 The objectives are 
 
@@ -24,23 +24,23 @@ wallet developpers should be able to use their favorite Bitcoin library with min
 
 Initially, before each payment phase, Tumbler generates a fresh ECDSA key pair (PKT, SKT).
 
-Bob generates 2 key pairs, “real” (PKB, SKB) and “fake” (PKF, SKF). Bob keeps PKF secret for now and publishes PKB.
+Bob generates an ECDSA key pair,(PKB, SKB), for "real" transactions and picks a random 128-bit blinding factor R for “fake” transactions. Bob keeps R secret for now and publishes PKB.
 
-In Fig. 3 **step 2**, Bob generates 15 “real” payout addresses (keeps them secret for now) and prepares 15 distinct “real” transactions.
+In Fig. 4 **step 2**, Bob generates 15 “real” payout addresses (keeps them secret for now) and prepares 15 distinct “real” transactions.
 
 In **step 3**, Bob prepares 285  “fake” transactions like so:
 
-Fake transaction i pays Tumbler  compressed Bitcoin address (corresponding to PKT) 1 BTC (no network fee bearing in mind the transaction will never hit the blockchain ) with an OP_RETURN output containing the hex string `H || i `where H is the hash160 corresponding to the public key PKF.
+Fake transaction i pays Tumbler  compressed Bitcoin address (corresponding to PKT) 1 BTC (no network fee bearing in mind the transaction will never hit the blockchain ) with an OP_RETURN output containing the hex string `R || i `.
 
 Such fake transaction only sends a full refund to Tumbler and is unlikely to confirm without network fees.
-_No need for Bob to generate (and later transmit to Tumbler) a set of 300 random pad values. Bob needs only to generate 2 regular, Bitcoin key pairs._
+_No need for Bob to generate (and later transmit to Tumbler) a set of 300 random pad values. Bob needs only to generate one regular, Bitcoin key pair and one random blinding factor._
 
 Bob hides the transactions in 300 sighash values (regular Bitcoin sighash computations here) , permutes them (**Step 4**), and finally sends them to Tumbler as beta1, ..., beta300.
 
 _Minimized data flow: no need for Bob to send to Tumbler any hR, hF_ 
 
 In Step 5, Tumbler signs each betai with SKT to create an ECDSA-Secp256k1 signature sigmai. 
-_No change from original white paper._
+_No change from white paper._
 
 **Step 6**: Bob sends to Tumbler the 15 “real” indices along with PKF.
 
