@@ -30,7 +30,9 @@ In Fig. 4 **step 2**, Bob generates 15 “real” payout addresses (keeps them s
 
 In **step 3**, Bob prepares 285  “fake” transactions like so:
 
-Fake transaction i pays Tumbler  compressed Bitcoin address (corresponding to PKT) 1 BTC (no network fee bearing in mind the transaction will never hit the blockchain ) with an OP_RETURN output containing the hex string `R || i `.
+Fake transaction i pays Tumbler compressed Bitcoin address (corresponding to PKT) 1 BTC in output 0 (no network fee bearing in mind the transaction will never hit the blockchain ) with an OP_RETURN output (output 1) containing the hex string
+
+`R || i `
 
 Such fake transaction only sends a full refund to Tumbler and is unlikely to confirm without network fees.
 _No need for Bob to generate (and later transmit to Tumbler) a set of 300 random pad values. Bob needs only to generate one regular, Bitcoin key pair and one random blinding factor._
@@ -42,13 +44,13 @@ _Minimized data flow: no need for Bob to send to Tumbler any hR, hF_
 In Step 5, Tumbler signs each betai with SKT to create an ECDSA-Secp256k1 signature sigmai. 
 _No change from white paper._
 
-**Step 6**: Bob sends to Tumbler the 15 “real” indices along with PKF.
+**Step 6**: Bob sends to Tumbler the 15 “real” indices along with blinding factor R.
 
-_Minimized data flow: Bob sends  a single public key PKF in lieu of salt value and 300 pad values._
+_Minimized data flow: Bob sends a single 128-bit blinding factor R in lieu of a salt value and 300 pad values._
 
 **Step 7**: Tumbler can now compute the “fake” sighash values and verify that they match the “fake” betai values:
-betai = sighash value of tx paying Tumbler 1 BTC with an OP_RETURN output bearing the hash160 digest corresponding to PKF. 
+betai = sighash value of tx paying Tumbler 1 BTC in output 0 with an OP_RETURN output (output 1) bearing the hex string `R || i `
 
-The hash160 is appended with i so that each i is a preimage of betai.
+The i index is appended to R so that each i is a preimage of betai.
 _No need for the CashOutTFormat nor the FakeFormat specified in the original white paper_
 
