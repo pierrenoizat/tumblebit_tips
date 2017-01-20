@@ -70,5 +70,5 @@ _No need for the CashOutTFormat nor the FakeFormat specified in the original whi
 
 With this proposal, 
 
-1. the amount of data sent by Bob to Tumbler in steps 4 and 6 is reduced by 98% or 4624 bytes from the original protocol design.
+1. the amount of data sent by Bob to Tumbler in steps 4 and 6 is reduced by 4624 bytes, that is a 20-25% redcution of the total data flow in the interactions between Bob and Tumbler.
 2. the need for specific formats like CashOutTFormat and FakeFormat is avoided so a regular Bitcoin library is sufficient to build a wallet implementation.
