@@ -48,14 +48,15 @@ _No change from white paper._
 
 _Minimized data flow: Bob sends a single 128-bit blinding factor r in lieu of a salt value and 285 pad values._
 
+
 | Original      | Size        | TIP 1        | Size        |
 | ------------- |:-----------:| ------------:| ----------- |
 | R, F          |  < 64 bytes | R, F         | < 64 bytes  |
 | hR, hF        | 64 bytes    |              |             |
 | salt          | 16 bytes    |              |             |
 | 285 random r  | 4560 bytes  | one random r | 16 bytes    |
-| ------------- |:-----------:| ------------:| ----------- |
-| Total         | 4704 bytes  |              | 80 bytes
+| Total         | 4704 bytes  | Total        | 80 bytes    |
+
 
 **Step 7**: Tumbler can now compute the “fake” sighash values and verify that they match the “fake” betai values:
 betai = sighash value of tx paying Tumbler 1 BTC in output 0 with an OP_RETURN output (output 1) bearing the hex string 
