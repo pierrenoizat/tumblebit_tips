@@ -7,7 +7,7 @@
 ### Background
 
 
-While implementing a demo Tumblebit server in “classic tumbler” mode and after carefully reviewing **Fig 4 of the [white paper](https://eprint.iacr.org/2016/575.pdf) describing interactions between Tumbler and Bob**, I came to the conclusion that steps 2,3,4 and steps 6,7 could be simplified (step 5 and 9-12 are unchanged).
+While implementing a demo Tumblebit server in “classic tumbler” mode and after carefully reviewing **Fig 4 of the [white paper](https://eprint.iacr.org/2016/575.pdf) describing interactions between Tumbler and Bob**, I came to the conclusion that steps 2-7 could be simplified (steps 9-12 are unchanged).
 
 The objectives are 
 
@@ -41,8 +41,9 @@ Bob hides the transactions in 84 sighash values (regular Bitcoin sighash computa
 
 _Minimized data flow: no need for Bob to send to Tumbler any hR, hF_ 
 
-In Step 5, Tumbler signs each betai with SKT to create an ECDSA-Secp256k1 signature sigmai. 
-_No change from white paper._
+In **Step 5**, Tumbler signs each betai with SKT to create an ECDSA-Secp256k1 signature sigmai. Tumbler picks 84 random 256-bit symetric encryption keys epsilon and computes ci = AES256( epsiloni, sigmai )
+_Minimized data flow: we propose a simple AES256 encryption instead of the complex SHA512 hash specified in the original paper: this yields most of the data traffic reduction_ 
+ 
 
 **Step 6**: Bob sends to Tumbler the 42 “real” indices along with blinding factor r.
 
