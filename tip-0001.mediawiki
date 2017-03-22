@@ -56,4 +56,60 @@ In '''Step 5''', Tumbler signs each betai with SKT to create an ECDSA-Secp256k1 
 |align="center"| 64 Bytes
 |
 
+|align="center"| 0
+|-
+| 84 (z,c) couples
+|align="center"| 26880 Bytes
+|
+
+|align="center"| 24192 Bytes
+|-
+| Salt
+|align="center"| 32 bytes
+|
+
+|align="center"| 0
+|-
+| 42 random r
+|align="center"| 1344 Bytes
+| One random r
+|align="center"| 32 Bytes
+|-
+| 41 Quotients
+|align="center"| 10496 Bytes
+|
+
+|align="center"| 10496 Bytes
+|-
+| 42 Epsilons
+|align="center"| 10752 Bytes
+|
+
+|align="center"| 1344 Bytes
+|-
+| Total
+|align="center"| '''52256 Bytes'''
+|
+
+|align="center"| '''38752 Bytes'''
+|-
+| Reduction
+|align="center"|
+
+|
+
+|align="center"| '''26%'''
 |}
+
+'''Step 7''': Tumbler can now compute the “fake” sighash values and verify that they match the “fake” betai values: betai = sighash value of tx paying Tumbler 1 BTC in output 0 with an OP_RETURN output (output 1) bearing the hex string
+
+<code>r || i</code>
+
+The i index is appended to r so that each i is a preimage of betai. ''No need for the CashOutTFormat nor the FakeFormat specified in the original white paper''
+
+'''Conclusion'''
+
+With this proposal,
+
+# the total data flow in the interactions between Bob and Tumbler is reduced by 26% as a result of the simplification and use of AES256 for symetric encryption.
+# the need for specific formats like CashOutTFormat and FakeFormat is avoided so a regular Bitcoin library is sufficient to build a wallet implementation.
